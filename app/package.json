@@ -1,1 +1,17 @@
-
+{
+  "name": "cloud-project-1-app",
+  "version": "1.0.0",
+  "description": "3-tier AWS portfolio app - backend API with health check, DB and S3 integration",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "test": "node tests/smoke.test.js"
+  },
+  "dependencies": {
+    "express": "^4.19.2",
+    "pg": "^8.12.0",
+    "winston": "^3.13.0",
+    "aws-sdk": "^2.1691.0",
+    "dotenv": "^16.4.5"
+  }
+}
