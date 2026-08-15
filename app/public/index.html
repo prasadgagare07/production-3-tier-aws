@@ -1,1 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Project 1 - 3-Tier AWS App</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<style>
+  body { font-family: -apple-system, Arial, sans-serif; max-width: 640px; margin: 40px auto; padding: 0 16px; color: #1a1a1a; }
+  h1 { font-size: 1.4rem; }
+  button { padding: 8px 14px; margin-right: 8px; cursor: pointer; }
+  pre { background: #f4f4f4; padding: 12px; border-radius: 6px; overflow-x: auto; }
+</style>
+</head>
+<body>
+  <h1>Project 1 — 3-Tier AWS Portfolio App</h1>
+  <p>Frontend served from EC2 (behind ALB), backend API talks to private RDS PostgreSQL and S3.</p>
+  <button onclick="recordVisit()">Record Visit (DB write)</button>
+  <button onclick="getCount()">Get Visit Count (DB read)</button>
+  <button onclick="getInstance()">Which EC2 instance?</button>
+  <button onclick="getFiles()">List S3 Files</button>
+  <pre id="out">Output will appear here…</pre>
 
+<script>
+const out = document.getElementById('out');
+async function call(url, opts) {
+  out.textContent = 'Loading...';
+  try {
+    const res = await fetch(url, opts);
+    const data = await res.json();
+    out.textContent = JSON.stringify(data, null, 2);
+  } catch (e) {
+    out.textContent = 'Error: ' + e.message;
+  }
+}
+function recordVisit() { call('/api/visits', { method: 'POST' }); }
+function getCount() { call('/api/visits/count'); }
+function getInstance() { call('/api/instance'); }
+function getFiles() { call('/api/storage/files'); }
+</script>
+</body>
+</html>
