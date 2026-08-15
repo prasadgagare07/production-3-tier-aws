@@ -195,5 +195,3 @@ High Availability
 Cost Awareness
 Project Goal
 Build and deploy a realistic production-style AWS environment while demonstrating practical Cloud Engineer skills in infrastructure, automation, security, monitoring, deployment, and troubleshooting.
-
-**This is the version I recommend.** It is enough for GitHub, looks professional, and doesn't turn your README into a 10-page manual.
