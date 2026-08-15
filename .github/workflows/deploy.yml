@@ -1,1 +1,50 @@
+name: Deploy Application
 
+on:
+  push:
+    branches: [main]
+    paths: ["app/**"]
+  workflow_dispatch: {}
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: app
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - run: npm install --package-lock-only
+      - run: npm run test
+
+  deploy:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # REPLACE role-to-assume with your OIDC IAM role ARN
+      - name: Configure AWS credentials (OIDC)
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_OIDC_ROLE_ARN }}
+          aws-region: ${{ vars.AWS_REGION }}
+
+      # Deploys via SSM Send-Command to every instance in the Auto Scaling
+      # Group - no SSH keys, no bastion host needed.
+      - name: Package app
+        run: tar -czf app.tar.gz -C app .
+
+      - name: Upload app bundle to S3
+        run: aws s3 cp app.tar.gz s3://${{ vars.S3_BUCKET_NAME }}/deploys/app-${{ github.sha }}.tar.gz
+
+      - name: Deploy to EC2 instances via SSM
+        run: |
+          bash scripts/deploy.sh "${{ vars.ASG_NAME }}" "${{ vars.S3_BUCKET_NAME }}" "${{ github.sha }}" "${{ vars.AWS_REGION }}"
