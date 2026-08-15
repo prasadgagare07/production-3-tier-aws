@@ -1,1 +1,14 @@
+# Copy this file to terraform.tfvars and fill in your own values.
+# terraform.tfvars is gitignored - never commit it.
 
+project_name = "cloud-project-1"
+environment  = "dev"
+
+aws_region = "ap-south-1"          # REPLACE with your AWS region
+azs        = ["ap-south-1a", "ap-south-1b"]
+
+# Leave blank for first deploy (HTTP only). Fill in after you provision
+# an ACM certificate + Route 53 hosted zone for your domain.
+domain_name     = ""                # REPLACE e.g. "cloudproject.example.com"
+hosted_zone_id  = ""                # REPLACE with your Route 53 zone ID
+certificate_arn = ""                # REPLACE with ACM cert ARN (us matching region)
