@@ -1,1 +1,27 @@
+# Terraform
+terraform/.terraform/
+terraform/.terraform.lock.hcl
+terraform/*.tfstate
+terraform/*.tfstate.*
+terraform/terraform.tfvars
+terraform/*.tfplan
+crash.log
+crash.*.log
 
+# Secrets / env
+.env
+*.pem
+*.key
+
+# Node
+node_modules/
+npm-debug.log*
+app/node_modules/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/
+.idea/
